@@ -399,25 +399,38 @@ def embedding_lookup(input_ids,
 
   Returns:
     float Tensor of shape [batch_size, seq_length, embedding_size].
+  Args:
+    input_ids:              输入的id表，shape是[batch_size, seq_length] 
+    vocab_size:             字典大小
+    embedding_size:         词向量维度 
+    initializer_range:      初始值范围
+    word_embedding_name:    这个表的名字
+    use_one_hot_embeddings: 是否使用one-hot-key  
   """
   # This function assumes that the input is of shape [batch_size, seq_length,
   # num_inputs].
   #
   # If the input is a 2D tensor of shape [batch_size, seq_length], we
   # reshape to [batch_size, seq_length, 1].
+  # input_id的真实形态是[batch_size, seq_length, 每个输入的句子数量？]
   if input_ids.shape.ndims == 2:
     input_ids = tf.expand_dims(input_ids, axis=[-1])
 
+  # embedding_table实际是字典大小(vocab_size*embedding_size)的变量,这里初始化embedding_table
   embedding_table = tf.get_variable(
       name=word_embedding_name,
-      shape=[vocab_size, embedding_size],
+      shape=[vocab_size, embedding_size], # 整个字典的shape
       initializer=create_initializer(initializer_range))
 
   if use_one_hot_embeddings:
-    flat_input_ids = tf.reshape(input_ids, [-1])
+    # 每个词用one-hot-key表示,shape为vocab_size*vocab_size的正方矩阵
+    flat_input_ids = tf.reshape(input_ids, [-1])  #展平
     one_hot_input_ids = tf.one_hot(flat_input_ids, depth=vocab_size)
+    # 查找字典, output的shape是vocab_size*embedding_size
     output = tf.matmul(one_hot_input_ids, embedding_table)
   else:
+    # embbedding_lookup 是按照第一个维度查询的
+    # output的shape是
     output = tf.nn.embedding_lookup(embedding_table, input_ids)
 
   input_shape = get_shape_list(input_ids)

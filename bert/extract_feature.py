@@ -1,9 +1,10 @@
+# -*- coding:utf-8 -*-  
 from bert.graph import import_tf
 from bert import modeling
 from bert import tokenization
 from bert.graph import optimize_graph
 from bert import args
-from queue import Queue
+from Queue import Queue
 from threading import Thread
 
 tf = import_tf(0, True)
@@ -55,7 +56,7 @@ class BertVector:
         self.estimator = self.get_estimator()
         self.input_queue = Queue(maxsize=1)
         self.output_queue = Queue(maxsize=1)
-        self.predict_thread = Thread(target=self.predict_from_queue, daemon=True)
+        self.predict_thread = Thread(target=self.predict_from_queue)
         self.predict_thread.start()
 
     def get_estimator(self):
@@ -63,8 +64,10 @@ class BertVector:
         from tensorflow.python.estimator.run_config import RunConfig
         from tensorflow.python.estimator.model_fn import EstimatorSpec
 
+        #读取已经存储的graph
         def model_fn(features, labels, mode, params):
             with tf.gfile.GFile(self.graph_path, 'rb') as f:
+                # GraphDef用来配置Session
                 graph_def = tf.GraphDef()
                 graph_def.ParseFromString(f.read())
 

@@ -38,10 +38,12 @@ def optimize_graph(logger=None, verbose=False, pooling_strategy=PoolingStrategy.
         logger = set_logger(colored('BERT_VEC', 'yellow'), verbose)
     try:
         # we don't need GPU for optimizing the graph
+        # 返回tensorflow并设置日志级别
         tf = import_tf(device_id=0, verbose=verbose)
         from tensorflow.python.tools.optimize_for_inference_lib import optimize_for_inference
 
         # allow_soft_placement:自动选择运行设备
+        # ConfigProto用来配置Session
         config = tf.ConfigProto(allow_soft_placement=True)
         config_fp = args.config_name
         init_checkpoint = args.ckpt_name
@@ -124,6 +126,7 @@ def optimize_graph(logger=None, verbose=False, pooling_strategy=PoolingStrategy.
             output_tensors = [pooled]
             tmp_g = tf.get_default_graph().as_graph_def()
 
+        # 保存计算图
         with tf.Session(config=config) as sess:
             logger.info('load parameters from checkpoint...')
             sess.run(tf.global_variables_initializer())

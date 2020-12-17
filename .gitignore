@@ -1,3 +1,5 @@
 chinese_L-12_H-768_A-12
 *.h5
 tmp_graph11
+bert_model
+*.pyc
