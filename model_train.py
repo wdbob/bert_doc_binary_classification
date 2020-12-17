@@ -22,9 +22,6 @@ print('begin encoding')
 f = lambda text: bert_model.encode([text])["encodes"][0]
 train_df['x'] = train_df['text'].apply(f)
 test_df['x'] = test_df['text'].apply(f)
-print('end encoding')
-print(train_df['x'][0].shape)
-stop
 
 x_train = np.array([vec for vec in train_df['x']])
 x_test = np.array([vec for vec in test_df['x']])
