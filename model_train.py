@@ -52,3 +52,6 @@ model.compile(loss='categorical_crossentropy',
 model.fit(x_train, y_train, batch_size=8, epochs=20)
 model.save('visit_classify.h5')
 print(model.evaluate(x_test, y_test))
+
+pred_test = model.predict(x_test)
+print(pred_test)
