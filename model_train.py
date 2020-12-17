@@ -4,6 +4,7 @@
 # time: 2020-02-12 13:37
 
 import os
+import pickle
 # 使用GPU训练
 os.environ["CUDA_VISIBLE_DEVICES"] = "4,5,6,7,8"
 
@@ -54,4 +55,6 @@ model.save('visit_classify.h5')
 print(model.evaluate(x_test, y_test))
 
 pred_test = model.predict(x_test)
+with open('data/test_pred.pkl', 'wb') as f:
+    pickle.dump(pred_test, f, protocol=2)
 print(pred_test)
