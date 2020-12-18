@@ -5,7 +5,7 @@
 
 import os
 # 使用GPU训练
-# os.environ["CUDA_VISIBLE_DEVICES"] = "4,5,6,7,8"
+os.environ["CUDA_VISIBLE_DEVICES"] = "4,5,6,7,8"
 
 import numpy as np
 from load_data import train_df, test_df
@@ -14,6 +14,8 @@ from keras.models import Model
 from keras.optimizers import Adam
 from keras.layers import Input, BatchNormalization, Dense
 from bert.extract_feature import BertVector
+train_df.loc[train_df['label']=='3', ['label']] = '2'
+test_df.loc[test_df['label']=='3', ['label']] = '2'
 
 # 读取文件并进行转换
 bert_model = BertVector(pooling_strategy="REDUCE_MEAN", max_seq_len=512)
