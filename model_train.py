@@ -14,8 +14,8 @@ from keras.models import Model
 from keras.optimizers import Adam
 from keras.layers import Input, BatchNormalization, Dense
 from bert.extract_feature import BertVector
-train_df.loc[train_df['label']=='3', ['label']] = '2'
-test_df.loc[test_df['label']=='3', ['label']] = '2'
+train_df.loc[train_df['label']=='3', ['label']] = '0'
+test_df.loc[test_df['label']=='3', ['label']] = '0'
 
 # 读取文件并进行转换
 bert_model = BertVector(pooling_strategy="REDUCE_MEAN", max_seq_len=512)
